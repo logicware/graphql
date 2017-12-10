@@ -17,7 +17,7 @@ export default {
     signinUser: async (root, data, {db: {User}}) => {
       const user = await User.findOne({where: {email: data.email.email}});
       if (user.comparePassword(data.email.password)) {
-        return {token: `token-${user.email}`, user};
+        return {token: user.generateJWT(), user};
       }
     },
   },

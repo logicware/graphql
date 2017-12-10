@@ -1,5 +1,8 @@
 import Promise from 'bluebird';
 import bcryptNode from 'bcrypt-nodejs';
+import jwt from 'jsonwebtoken';
+
+import config from '../../config';
 
 const bcrypt = Promise.promisifyAll(bcryptNode);
 
@@ -88,6 +91,18 @@ export default (sequelize, DataTypes) => {
         picture: this.picture
       }
     };
+  };
+
+  User.prototype.generateJWT = function() {
+    const today = new Date();
+    let exp = new Date(today);
+    exp.setDate(today.getDate() + 60);
+
+    return jwt.sign({
+      id: this.id,
+      username: this.name,
+      exp: parseInt(exp.getTime() / 1000),
+    }, config.jwt_secret);
   };
 
   return User;
