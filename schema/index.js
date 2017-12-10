@@ -6,16 +6,39 @@ const typeDefs = `
   type User {
     id: ID!
     email: String!
-    name: String!,
+    name: String!
     gender: String
+  }
+  
+  input AuthProviderSignupData {
+    email: AUTH_PROVIDER_EMAIL
+  }
+
+  input AUTH_PROVIDER_EMAIL {
+    email: String!
+    password: String!
+  }
+
+  type SigninPayload {
+    token: String
+    user: User
+  }
+  
+  type Topic {
+    id: ID!
+    text: String!
+    count: Int!
+    date: String!
   }
 
   type Query {
     allUsers: [User!]!
+    allTopics: [Topic!]
   }
 
   type Mutation {
     createUser(email: String!, name: String!, password: String!, gender: String): User
+    signinUser(email: AUTH_PROVIDER_EMAIL): SigninPayload!
   }
 `;
 

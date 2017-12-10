@@ -6,3 +6,14 @@ mutation {
     gender
   }
 }
+
+mutation {
+  signinUser(email: { email:"f@g.com", password: "testing"}) {
+    token
+    user {
+      name
+      email
+      id
+    }
+  }
+}

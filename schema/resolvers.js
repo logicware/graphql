@@ -3,13 +3,23 @@ export default {
     allUsers: async (root, data, {db: {User}}) => {
       const users = await User.findAll({});
       return users;
+    },
+    allTopics: async (root, data, {db: {Topic}}) => {
+      const topics = await Topic.findAll({});
+      return topics;
     }
   },
   Mutation: {
     createUser: async (root, data, {db: {User}}) => {
       const user = await User.create(data);
       return user;
-    }
+    },
+    signinUser: async (root, data, {db: {User}}) => {
+      const user = await User.findOne({where: {email: data.email.email}});
+      if (user.comparePassword(data.email.password)) {
+        return {token: `token-${user.email}`, user};
+      }
+    },
   },
 };
 
