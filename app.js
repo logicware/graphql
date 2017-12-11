@@ -56,7 +56,7 @@ db.sequelize
   .authenticate()
   .then(() => {
     console.log('Successfully connected to sequelize database');
-    db.sequelize.sync().then(() => {
+    db.sequelize.sync({ alter: false }).then(() => {
       // woot woot
       console.log('DB Synced');
     }).catch(error => {

@@ -14,10 +14,17 @@ export default {
       const user = await User.create(data);
       return user;
     },
-    signinUser: async (root, data, {db: {User}}) => {
+    signinUser: async (root, data, {db: {User, Token}}) => {
       const user = await User.findOne({where: {email: data.email.email}});
       if (user.comparePassword(data.email.password)) {
-        return {token: user.generateJWT(), user};
+        const token = user.generateJWT();
+        const loginRecord = {
+          userId: user.id,
+          kind: 'email',
+          accessToken: token
+        };
+        await Token.create(loginRecord);
+        return {token, user};
       }
     },
   },
