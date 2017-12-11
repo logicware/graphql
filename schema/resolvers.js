@@ -8,11 +8,6 @@ export default {
       const topics = await Topic.findAll({});
       return topics;
     },
-    Topic: {
-      postedBy: async ({userId}, data, {db: {User}}) => {
-        return await User.findOne({_id: userId});
-      }
-    },
   },
   Mutation: {
     createUser: async (root, data, {db: {User}}) => {
@@ -38,7 +33,38 @@ export default {
       const topic = await Topic.create(newTopic);
       return topic;
     },
+    createVote: async (root, data, {db: {Vote, Topic, sequelize}, user}) => {
+      const newVote = {
+        userId: user && user.id,
+        topicId: data.topicId,
+      };
+      const vote = await Vote.create(newVote);
+      if (vote) {
+        await Topic.update({ count: sequelize.literal('count + 1')}, {where: {id: vote.topicId}});
+      }
+      return vote;
+    },
+  },
+
+  Topic: {
+    postedBy: async (root, data, {db: {User}}) => {
+      const {userId} = root;
+      return await User.findOne({ where: {id: userId} });
+    }
+  },
+
+  Vote: {
+    user: async (root, data, {db: {User}}) => {
+      const {userId} = root;
+      return await User.findOne({ where: {id: userId} });
+    },
+    topic: async (root, data, {db: {Topic}}) => {
+      const {topicId} = root;
+      return await Topic.findOne({ where: {id: topicId} });
+    }
+
   }
+
 };
 
 /*

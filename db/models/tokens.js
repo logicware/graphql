@@ -21,7 +21,10 @@ export default (sequelize, DataTypes) => {
       }
     },
     {
-      timestamps: false
+      timestamps: false,
+      indexes: [
+        {fields: ['userId']}
+      ]
     });
 
   Token.associate = function (models) {

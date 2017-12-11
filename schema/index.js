@@ -31,18 +31,23 @@ const typeDefs = `
     date: String!
     postedBy: User
   }
+  
+  type Vote {
+    id: ID!
+    user: User!
+    topic: Topic!
+  }
 
   type Query {
     allUsers: [User!]!
     allTopics: [Topic!]
-    Topic: Topic!
   }
 
   type Mutation {
     createUser(email: String!, name: String!, password: String!, gender: String): User   
     signinUser(email: AUTH_PROVIDER_EMAIL): SigninPayload!
-    createTopic(text: String!): Topic
-    
+    createTopic(text: String!): Topic    
+    createVote(topicId: ID!): Vote
   }
 `;
 

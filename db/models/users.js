@@ -74,6 +74,10 @@ export default (sequelize, DataTypes) => {
       foreignKey: 'userId'
     });
 
+    User.hasMany(models.Vote, {
+      foreignKey: 'userId'
+    });
+
   };
 
   User.beforeCreate(hashPassword);

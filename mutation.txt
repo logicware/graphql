@@ -32,3 +32,20 @@ mutation {
     }
   }
 }
+
+
+mutation {
+  createVote(topicId: 1) {
+    id
+    user {
+      id
+      name
+      email
+    }
+    topic {
+      id
+      text
+      count
+    }
+  }
+}

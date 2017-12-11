@@ -1,13 +1,5 @@
 export default (sequelize, DataTypes) => {
-  const Topic = sequelize.define('Topic', {
-      text: DataTypes.STRING,
-      count: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
-        validate: {
-          min: 0
-        }
-      },
+  const Vote = sequelize.define('Vote', {
       date: {
         type: DataTypes.DATE,
         defaultValue: sequelize.fn('NOW')
@@ -19,23 +11,29 @@ export default (sequelize, DataTypes) => {
           key: 'id'
         }
       },
+      topicId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'Topics',
+          key: 'id'
+        }
+      },
     },
     {
       timestamps: false,
       indexes: [
-        {fields: ['userId']}
+        {fields: ['userId', 'topicId']}
       ]
     });
 
-  Topic.associate = function (models) {
-    Topic.belongsTo(models.User, {
+  Vote.associate = function (models) {
+    Vote.belongsTo(models.User, {
       foreignKey: 'userId'
     });
-
-    Topic.hasMany(models.Vote, {
+    Vote.belongsTo(models.Topic, {
       foreignKey: 'topicId'
     });
   };
 
-  return Topic;
+  return Vote;
 }
