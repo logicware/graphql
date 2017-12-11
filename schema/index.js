@@ -7,7 +7,8 @@ const typeDefs = `
     id: ID!
     email: String!
     name: String!
-    gender: String
+    gender: String,
+    votes: [Vote!]
   }
   
   input AuthProviderSignupData {
@@ -30,6 +31,7 @@ const typeDefs = `
     count: Int!
     date: String!
     postedBy: User
+    votes: [Vote!]
   }
   
   type Vote {

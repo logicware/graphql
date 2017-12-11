@@ -50,7 +50,12 @@ export default {
     postedBy: async (root, data, {db: {User}}) => {
       const {userId} = root;
       return await User.findOne({ where: {id: userId} });
+    },
+    votes: async (root, data, {db: {Vote}}) => {
+      const {id} = root;
+      return await Vote.findAll({ where: {topicId: id} });
     }
+
   },
 
   Vote: {
@@ -62,7 +67,12 @@ export default {
       const {topicId} = root;
       return await Topic.findOne({ where: {id: topicId} });
     }
+  },
 
+  User: {
+    votes: async ({id}, data, {db: {Vote}}) => {
+      return await Vote.findAll({where :{userId: id}});
+    },
   }
 
 };
