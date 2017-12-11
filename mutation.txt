@@ -17,3 +17,18 @@ mutation {
     }
   }
 }
+
+
+mutation {
+  topic: createTopic(text: "React.js") {
+    id
+    text
+    date
+    count
+    postedBy {
+      id
+      name
+      email
+    }
+  }
+}

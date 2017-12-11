@@ -69,6 +69,11 @@ export default (sequelize, DataTypes) => {
     User.hasMany(models.Token, {
       foreignKey: 'userId'
     });
+
+    User.hasMany(models.Topic, {
+      foreignKey: 'userId'
+    });
+
   };
 
   User.beforeCreate(hashPassword);

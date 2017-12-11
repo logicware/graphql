@@ -7,7 +7,12 @@ export default {
     allTopics: async (root, data, {db: {Topic}}) => {
       const topics = await Topic.findAll({});
       return topics;
-    }
+    },
+    Topic: {
+      postedBy: async ({userId}, data, {db: {User}}) => {
+        return await User.findOne({_id: userId});
+      }
+    },
   },
   Mutation: {
     createUser: async (root, data, {db: {User}}) => {
@@ -27,10 +32,14 @@ export default {
         return {token, user};
       }
     },
-  },
+    createTopic: async (root, data, {db: {Topic}, user}) => {
+      console.log(data);
+      const newTopic = {text: data.text, userId: user.id};
+      const topic = await Topic.create(newTopic);
+      return topic;
+    },
+  }
 };
-
-
 
 /*
 const users = [

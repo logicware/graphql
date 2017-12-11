@@ -6,3 +6,18 @@ query {
     gender
   }
 }
+
+
+{
+  allTopics {
+    id
+    text
+    date
+    count
+    postedBy {
+      id
+      name
+      email
+    }
+  }
+}
