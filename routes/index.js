@@ -3,9 +3,11 @@ import express from 'express';
 import db from '../db/models';
 import bodyParser from "body-parser";
 import {graphiqlExpress, graphqlExpress} from "graphql-server-express/dist/index";
+
 import schema from "../schema";
 import authenticate from './auth';
 import buildDataloaders from '../schema/dataloaders';
+import formatError from '../schema/formatError';
 
 const router = express.Router();
 
@@ -34,6 +36,7 @@ const buildOptions = async (req, res) => {
       db,
       user
     }, // This context object is passed to all resolvers.
+    formatError,
     schema,
   };
 };
