@@ -47,9 +47,8 @@ export default {
   },
 
   Topic: {
-    postedBy: async (root, data, {db: {User}}) => {
-      const {userId} = root;
-      return await User.findOne({ where: {id: userId} });
+    postedBy: async ({userId}, data, {dataloaders: {userLoader}}) => {
+      return await userLoader.load(userId);
     },
     votes: async (root, data, {db: {Vote}}) => {
       const {id} = root;
@@ -59,9 +58,8 @@ export default {
   },
 
   Vote: {
-    user: async (root, data, {db: {User}}) => {
-      const {userId} = root;
-      return await User.findOne({ where: {id: userId} });
+    user: async ({userId}, data, {dataloaders: {userLoader}}) => {
+      return await userLoader.load(userId);
     },
     topic: async (root, data, {db: {Topic}}) => {
       const {topicId} = root;

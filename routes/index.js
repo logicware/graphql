@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import {graphiqlExpress, graphqlExpress} from "graphql-server-express/dist/index";
 import schema from "../schema";
 import authenticate from './auth';
+import buildDataloaders from '../schema/dataloaders';
 
 const router = express.Router();
 
@@ -23,10 +24,16 @@ router.get('/test', (req, res) => {
   });
 });
 
+
+
 const buildOptions = async (req, res) => {
   const user = await authenticate(req, db.User, db.Token);
   return {
-    context: {db, user}, // This context object is passed to all resolvers.
+    context: {
+      dataloaders: buildDataloaders(db),
+      db,
+      user
+    }, // This context object is passed to all resolvers.
     schema,
   };
 };
