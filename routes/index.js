@@ -46,7 +46,8 @@ router.use('/graphql', bodyParser.json(), graphqlExpress(buildOptions));
 router.use('/graphiql', graphiqlExpress(
   {
     endpointURL: '/graphql',
-    passHeader: `'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsInVzZXJuYW1lIjoiVXNlciBGIiwiZXhwIjoxNTE4MTU5MTIzLCJpYXQiOjE1MTI5NzUxMjN9.8U2jnJliKovK8inYi47tX35-GzHY5Aua21MmCrJkH0I'`
+    passHeader: `'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsInVzZXJuYW1lIjoiVXNlciBGIiwiZXhwIjoxNTE4MTU5MTIzLCJpYXQiOjE1MTI5NzUxMjN9.8U2jnJliKovK8inYi47tX35-GzHY5Aua21MmCrJkH0I'`,
+    subscriptionsEndpoint: `ws://localhost:3000/subscriptions`
   }
 ));
 

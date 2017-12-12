@@ -49,3 +49,17 @@ mutation {
     }
   }
 }
+
+subscription {
+  Topic(filter: {mutation_in: [CREATED]}) {
+    node {
+      id
+      text
+      postedBy {
+        id
+        name
+        email
+      }
+    }
+  }
+}

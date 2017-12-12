@@ -1,3 +1,5 @@
+import pubsub from './pubsub';
+
 export default {
   Query: {
     allUsers: async (root, data, {db: {User}}) => {
@@ -31,6 +33,9 @@ export default {
       console.log(data);
       const newTopic = {text: data.text, userId: user.id};
       const topic = await Topic.create(newTopic);
+
+      pubsub.publish('Topic', {Topic: {mutation: 'CREATED', node: topic}});
+
       return topic;
     },
     createVote: async (root, data, {db: {Vote, Topic, sequelize}, user}) => {
@@ -71,7 +76,13 @@ export default {
     votes: async ({id}, data, {db: {Vote}}) => {
       return await Vote.findAll({where :{userId: id}});
     },
-  }
+  },
+
+  Subscription: {
+    Topic: {
+      subscribe: () => pubsub.asyncIterator('Topic'),
+    },
+  },
 
 };
 

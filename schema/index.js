@@ -51,6 +51,25 @@ const typeDefs = `
     createTopic(text: String!): Topic    
     createVote(topicId: ID!): Vote
   }
+  
+  type Subscription {
+    Topic(filter: TopicSubscriptionFilter): TopicSubscriptionPayload
+  }
+
+  input TopicSubscriptionFilter {
+    mutation_in: [_ModelMutationType!]
+  }
+
+  type TopicSubscriptionPayload {
+    mutation: _ModelMutationType!
+    node: Topic
+  }
+
+  enum _ModelMutationType {
+    CREATED
+    UPDATED
+    DELETED
+  }
 `;
 
 // Generate the schema object from your types definition.
