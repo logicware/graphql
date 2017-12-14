@@ -1,14 +1,36 @@
 import pubsub from './pubsub';
+import Sequelize from "sequelize";
+
+function buildFilters(OR) {
+  let filter = '';
+  if (OR.length) {
+    OR.forEach(function(cond) {
+      if (cond.text_contains) {
+        filter += (filter ? ' OR ' : '') + `text iLIke '%${cond.text_contains}%'`;
+      }
+      if (cond.date_contains) {
+        filter += (filter ? ' OR ' : '') + `"date"::text iLike '%${cond.date_contains}%'`;
+      }
+    });
+    console.log(filter);
+  }
+
+  return filter;
+}
+
+async function getAllTopics(sequelize, query) {
+  return sequelize.query('SELECT * FROM "Topics" ' + (query ? 'WHERE ' + query : ''), { type: sequelize.QueryTypes.SELECT });
+}
 
 export default {
   Query: {
     allUsers: async (root, data, {db: {User}}) => {
-      const users = await User.findAll({});
-      return users;
+      return await User.findAll({});
     },
-    allTopics: async (root, data, {db: {Topic}}) => {
-      const topics = await Topic.findAll({});
-      return topics;
+    allTopics: async (root, {filter}, {db: {sequelize}}) => {
+      console.log(filter);
+      let query = filter ? buildFilters(filter.OR) : '';
+      return await getAllTopics(sequelize, query);
     },
   },
   Mutation: {

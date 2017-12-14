@@ -42,9 +42,15 @@ const typeDefs = `
 
   type Query {
     allUsers: [User!]!
-    allTopics: [Topic!]
+    allTopics(filter: TopicFilter): [Topic!]
   }
 
+  input TopicFilter {
+    OR: [TopicFilter!]
+    text_contains: String
+    date_contains: String
+  }
+  
   type Mutation {
     createUser(email: String!, name: String!, password: String!, gender: String): User   
     signinUser(email: AUTH_PROVIDER_EMAIL): SigninPayload!

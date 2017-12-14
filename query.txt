@@ -21,3 +21,24 @@ query {
     }
   }
 }
+
+{
+  allTopics(filter: {
+		OR: [
+			{text_contains: "Node" },
+			{date_contains: "12-13" }
+		]
+	}) {
+    id
+    text
+    date
+    postedBy {
+      email
+    }
+    votes {
+      user {
+        email
+      }
+    }
+  }
+}
