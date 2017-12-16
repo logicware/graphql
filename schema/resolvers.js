@@ -18,8 +18,24 @@ function buildFilters(OR) {
   return filter;
 }
 
-async function getAllTopics(sequelize, query) {
-  return sequelize.query('SELECT * FROM "Topics" ' + (query ? 'WHERE ' + query : ''), { type: sequelize.QueryTypes.SELECT });
+async function getAllTopics(sequelize, query, offset, limit) {
+  let options = { type: sequelize.QueryTypes.SELECT };
+  let replacements;
+  if (offset) {
+    replacements = { offset };
+  }
+  if (limit) {
+      replacements = { ...replacements, limit };
+  }
+  console.log(replacements);
+  if (replacements) {
+    options.replacements = replacements;
+  }
+  return sequelize.query(
+    'SELECT * ' +
+    'FROM "Topics" ' + (query ? 'WHERE ' + query : ' order by "text" ') +
+    (replacements.offset ? ' offset :offset ' : '') +
+    (replacements.limit  ? ' limit  :limit '  : ''), options);
 }
 
 export default {
@@ -27,10 +43,10 @@ export default {
     allUsers: async (root, data, {db: {User}}) => {
       return await User.findAll({});
     },
-    allTopics: async (root, {filter}, {db: {sequelize}}) => {
-      console.log(filter);
+    allTopics: async (root, {filter, offset, limit}, {db: {sequelize}}) => {
+      console.log(filter, offset, limit);
       let query = filter ? buildFilters(filter.OR) : '';
-      return await getAllTopics(sequelize, query);
+      return await getAllTopics(sequelize, query, offset, limit);
     },
   },
   Mutation: {

@@ -42,7 +42,7 @@ const typeDefs = `
 
   type Query {
     allUsers: [User!]!
-    allTopics(filter: TopicFilter): [Topic!]
+    allTopics(filter: TopicFilter, offset: Int, limit: Int): [Topic!]
   }
 
   input TopicFilter {
