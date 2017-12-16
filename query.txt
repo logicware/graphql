@@ -42,3 +42,20 @@ query {
     }
   }
 }
+
+
+{
+  allTopics( limit: 2, offset: 3) {
+    id
+    text
+    date
+    postedBy {
+      email
+    }
+    votes {
+      user {
+        email
+      }
+    }
+  }
+}

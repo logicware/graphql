@@ -34,8 +34,8 @@ async function getAllTopics(sequelize, query, offset, limit) {
   return sequelize.query(
     'SELECT * ' +
     'FROM "Topics" ' + (query ? 'WHERE ' + query : ' order by "text" ') +
-    (replacements.offset ? ' offset :offset ' : '') +
-    (replacements.limit  ? ' limit  :limit '  : ''), options);
+    (replacements && replacements.offset ? ' offset :offset ' : '') +
+    (replacements && replacements.limit  ? ' limit  :limit '  : ''), options);
 }
 
 export default {
@@ -68,6 +68,9 @@ export default {
       }
     },
     createTopic: async (root, data, {db: {Topic}, user}) => {
+      if (!user) {
+        throw (new Error("Unauthorized"));
+      }
       console.log(data);
       const newTopic = {text: data.text, userId: user.id};
       const topic = await Topic.create(newTopic);
