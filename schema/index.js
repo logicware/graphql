@@ -45,6 +45,7 @@ const typeDefs = `
     allUsers: [User!]!
     allTopics(filter: TopicFilter, offset: Int, limit: Int): [Topic!]
     userById(userId: Int!): User
+    topicById(topicId: Int): Topic
   }
 
   input TopicFilter {

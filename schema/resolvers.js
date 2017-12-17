@@ -53,6 +53,9 @@ export default {
     },
     userById: async (root, {userId}, {db: {User}}) => {
       return await User.findById(userId);
+    },
+    topicById: async (root, {topicId}, {db: {Topic}}) => {
+      return await Topic.findById(topicId);
     }
   },
   Mutation: {

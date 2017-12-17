@@ -43,6 +43,23 @@ query {
   }
 }
 
+query {
+  topics: allTopics(filter: {OR: [{postedById: 1}]}, offset: 0, limit: 10) {
+    id
+    text
+    date
+    postedBy {
+			id
+      email
+    }
+    votes {
+      user {
+        email
+      }
+    }
+  }
+}
+
 
 {
   allTopics( limit: 2, offset: 3) {
@@ -58,4 +75,60 @@ query {
       }
     }
   }
+}
+
+{
+  topicById(topicId: 6) {
+    id
+    text
+    votes {
+      user {
+        id
+        name
+      }
+    }
+    postedBy {
+      id
+      name
+			email
+    }
+  }
+}
+
+{
+  userById(userId: 1) {
+    id
+    name
+    email
+    gender
+    votes {
+      topic {
+        id
+        text
+      }
+    }
+    topics {
+      id
+      text
+    }
+  }
+}
+
+query {
+	users: allUsers {
+		id
+		name
+		email
+		gender
+		topics {
+			id
+			text
+		}
+		votes {
+			topic {
+				id
+				text
+			}
+		}
+	}
 }
