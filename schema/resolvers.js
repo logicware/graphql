@@ -11,6 +11,9 @@ function buildFilters(OR) {
       if (cond.date_contains) {
         filter += (filter ? ' OR ' : '') + `"date"::text iLike '%${cond.date_contains}%'`;
       }
+      if (cond.postedById) {
+        filter += (filter ? ' OR ' : '') + `"userId" = ${cond.postedById}`;
+      }
     });
     console.log(filter);
   }
@@ -48,6 +51,9 @@ export default {
       let query = filter ? buildFilters(filter.OR) : '';
       return await getAllTopics(sequelize, query, offset, limit);
     },
+    userById: async (root, {userId}, {db: {User}}) => {
+      return await User.findById(userId);
+    }
   },
   Mutation: {
     createUser: async (root, data, {db: {User}}) => {
@@ -117,6 +123,9 @@ export default {
     votes: async ({id}, data, {db: {Vote}}) => {
       return await Vote.findAll({where :{userId: id}});
     },
+    topics: async ({id}, data, {db: {Topic}}) => {
+      return await Topic.findAll({where :{userId: id}});
+    }
   },
 
   Subscription: {

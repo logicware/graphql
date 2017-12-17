@@ -9,6 +9,7 @@ const typeDefs = `
     name: String!
     gender: String,
     votes: [Vote!]
+    topics: [Topic!]
   }
   
   input AuthProviderSignupData {
@@ -43,12 +44,14 @@ const typeDefs = `
   type Query {
     allUsers: [User!]!
     allTopics(filter: TopicFilter, offset: Int, limit: Int): [Topic!]
+    userById(userId: Int!): User
   }
 
   input TopicFilter {
     OR: [TopicFilter!]
     text_contains: String
     date_contains: String
+    postedById: Int
   }
   
   type Mutation {
