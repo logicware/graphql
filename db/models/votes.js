@@ -22,7 +22,8 @@ export default (sequelize, DataTypes) => {
     {
       timestamps: false,
       indexes: [
-        {fields: ['userId', 'topicId']}
+        {fields: ['userId', 'topicId']},
+        {fields: ['topicId']}
       ]
     });
 

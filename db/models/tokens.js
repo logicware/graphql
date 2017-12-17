@@ -23,7 +23,9 @@ export default (sequelize, DataTypes) => {
     {
       timestamps: false,
       indexes: [
-        {fields: ['userId']}
+        {fields: ['userId']},
+        {fields: ['accessToken']},
+        {fields: ['kind']}
       ]
     });
 
