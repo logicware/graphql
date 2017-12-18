@@ -1,55 +1,13 @@
 import pubsub from './pubsub';
 import Sequelize from "sequelize";
 
-function buildFilters(OR) {
-  let filter = '';
-  if (OR.length) {
-    OR.forEach(function(cond) {
-      if (cond.text_contains) {
-        filter += (filter ? ' OR ' : '') + `text iLIke '%${cond.text_contains}%'`;
-      }
-      if (cond.date_contains) {
-        filter += (filter ? ' OR ' : '') + `"date"::text iLike '%${cond.date_contains}%'`;
-      }
-      if (cond.postedById) {
-        filter += (filter ? ' OR ' : '') + `"userId" = ${cond.postedById}`;
-      }
-    });
-    console.log(filter);
-  }
-
-  return filter;
-}
-
-async function getAllTopics(sequelize, query, offset, limit) {
-  let options = { type: sequelize.QueryTypes.SELECT };
-  let replacements;
-  if (offset) {
-    replacements = { offset };
-  }
-  if (limit) {
-      replacements = { ...replacements, limit };
-  }
-  console.log(replacements);
-  if (replacements) {
-    options.replacements = replacements;
-  }
-  return sequelize.query(
-    'SELECT * ' +
-    'FROM "Topics" ' + (query ? 'WHERE ' + query : ' order by "text" ') +
-    (replacements && replacements.offset ? ' offset :offset ' : '') +
-    (replacements && replacements.limit  ? ' limit  :limit '  : ''), options);
-}
-
 export default {
   Query: {
     allUsers: async (root, data, {db: {User}}) => {
       return await User.findAll({});
     },
-    allTopics: async (root, {filter, offset, limit}, {db: {sequelize}}) => {
-      console.log(filter, offset, limit);
-      let query = filter ? buildFilters(filter.OR) : '';
-      return await getAllTopics(sequelize, query, offset, limit);
+    allTopics: async (root, {filter, offset, limit}, {db: {Topic}}) => {
+      return await Topic.getAllTopics(filter, offset, limit);
     },
     userById: async (root, {userId}, {db: {User}}) => {
       return await User.findById(userId);
@@ -60,8 +18,7 @@ export default {
   },
   Mutation: {
     createUser: async (root, data, {db: {User}}) => {
-      const user = await User.create(data);
-      return user;
+      return await User.create(data);
     },
     signinUser: async (root, data, {db: {User, Token}}) => {
       const user = await User.findOne({where: {email: data.email.email}});

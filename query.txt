@@ -132,3 +132,20 @@ query {
 		}
 	}
 }
+
+{
+  topics: allTopics(filter: {AND: [{postedById: 10}, {text_contains: "Node"}, {date_contains: "2017-12"}]}, offset: 0, limit: 10) {
+    id
+    text
+    date
+    postedBy {
+      id
+      email
+    }
+    votes {
+      user {
+        email
+      }
+    }
+  }
+}

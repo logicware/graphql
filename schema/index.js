@@ -50,6 +50,7 @@ const typeDefs = `
 
   input TopicFilter {
     OR: [TopicFilter!]
+    AND: [TopicFilter!]
     text_contains: String
     date_contains: String
     postedById: Int
